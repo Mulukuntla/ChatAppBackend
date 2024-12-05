@@ -22,7 +22,10 @@ app.use(bodyParser.json());
 
 
 
-app.use(cors());
+app.use(cors({
+    origin:"*",
+    credentials:true,
+}));
 
 
 
@@ -46,7 +49,7 @@ app.use((req,res)=>{
 
 
 sequelize
-.sync({force:true})
+.sync()
 .then(result =>{
   console.log(result)
   const PORT = process.env.PORT || 4000; 
