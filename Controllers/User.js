@@ -1,6 +1,7 @@
 //const Expense= require("../models/Expense")
 const User= require("../models/User")
 const bcrypt = require('bcrypt');
+const jwt=require("jsonwebtoken")
 
 
 
@@ -12,6 +13,12 @@ function isstringinvalid(string){
   else{
     return false
   }
+}
+
+
+function generateAccessToken(id){
+  return jwt.sign({userId:id},"hi")
+  
 }
 
 const signup= async (req,res,next) =>{
@@ -46,12 +53,50 @@ const signup= async (req,res,next) =>{
     res.status(500).json(err);
   }
 }
+const signin= async (req,res,next) =>{
+  console.log("Hii")
+  
+  try{
+    const email=req.body.email;
+    const password=req.body.password;
+    console.log(email,password)
+    const user=await User.findAll({where:{email}})
+    console.log("user------------>",user)
+    if(isstringinvalid(email) || isstringinvalid(password)){
+      console.log("Hi")
+      return res.status(400).json({err:"Bad parameters - Something is missing"})
+    }
+    console.log(user.length)
+    if(user.length>0){
+      console.log("password",user[0].password)
+      bcrypt.compare(password,user[0].password,(err,result)=>{
+        if(err){
+          return res.status(500).json({error:err});
+        }
+        if(result === true){
+          return res.status(200).json({success:true,message:"User loggedin Successfully",token:generateAccessToken(user[0].id)})
+        }
+        else{
+          return res.status(401).json({success:false,message:"Password is incorrect"})
+        }
+
+      })
+    }
+    else{
+      return res.status(404).json({success:false,message:"User not found"})
+    }
+    
+  }  
+  catch(err){
+    res.status(500).json({error:err});
+  }
+}
 
 
 
 
     
 module.exports={
-   
-    signup,
+  signup,
+  signin
 }
