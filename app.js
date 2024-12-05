@@ -6,6 +6,7 @@ dotenv.config();
 
 const sequelize=require('./util/database')
 const User = require('./routes/User')
+const messages = require('./routes/messages')
 
 var cors=require("cors")
 const app = express();
@@ -31,6 +32,7 @@ app.use(cors({
 
 
 app.use("/user",User)
+app.use("/messages",messages)
 
 app.use((req,res)=>{
   console.log("urll",req.url)
