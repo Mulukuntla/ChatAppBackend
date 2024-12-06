@@ -19,9 +19,20 @@ const sendMessage= async (req,res,next) =>{
   const allMessages= async (req,res,next) =>{
     console.log("Hii")
     try{
-       
+      console.log(req.params.id)
+      if(req.params.id== -1){
         const allMessages=await message.findAll()
-        res.status(200).json({allMessages:allMessages})
+        return res.status(200).json({allMessages:allMessages})
+
+      }
+      const allMessages=await message.findAll({where:{id:req.params.id}})
+      const all=allMessages[allMessages.length-1].id
+      const allMessagess=await message.findAll({
+        offset:all,
+      })
+      res.status(200).json({allMessages:allMessagess})
+
+      
     }
     catch(err){
       console.log(err)
