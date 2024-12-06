@@ -10,6 +10,7 @@ const userController=require("../Controllers/messages")
 
 
 router.post("/sendMessage",userauthenticate.authenticate,userController.sendMessage);
+router.get("/allMessages",userauthenticate.authenticate,userController.allMessages);
 
 
 module.exports = router;

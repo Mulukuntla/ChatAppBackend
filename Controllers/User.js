@@ -16,8 +16,8 @@ function isstringinvalid(string){
 }
 
 
-function generateAccessToken(id){
-  return jwt.sign({userId:id},"hi")
+function generateAccessToken(id,name){
+  return jwt.sign({userId:id,name:name},"hi")
   
 }
 
@@ -76,7 +76,7 @@ const signin= async (req,res,next) =>{
           return res.status(500).json({error:err});
         }
         if(result === true){
-          return res.status(200).json({success:true,message:"User loggedin Successfully",token:generateAccessToken(user[0].id)})
+          return res.status(200).json({success:true,message:"User loggedin Successfully",token:generateAccessToken(user[0].id,user[0].userName)})
         }
         else{
           return res.status(401).json({success:false,message:"Password is incorrect"})
