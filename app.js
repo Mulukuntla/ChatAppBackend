@@ -7,6 +7,12 @@ dotenv.config();
 const sequelize=require('./util/database')
 const User = require('./routes/User')
 const messages = require('./routes/messages')
+const group= require('./routes/group')
+
+const userTable=require("./models/User")
+const messagesTable=require("./models/messages")
+const groupTable=require("./models/group")
+const usergroupTable=require("./models/usergroup")
 
 var cors=require("cors")
 const app = express();
@@ -16,10 +22,22 @@ const app = express();
 
 //app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-//app.use(express.static(path.join(__dirname, 'public')));
 
+app.use(express.static(path.join(__dirname, 'public')));
 
+userTable.hasMany(messagesTable); // User has many Posts
+messagesTable.belongsTo(userTable); 
 
+groupTable.hasMany(messagesTable); // User has many Posts
+messagesTable.belongsTo(groupTable); 
+userTable.belongsToMany(groupTable, { through: "usergroup" });
+groupTable.belongsToMany(userTable, { through: "usergroup"});
+
+usergroupTable.belongsTo(userTable, { foreignKey: 'userId' });
+usergroupTable.belongsTo(groupTable, { foreignKey: 'groupId' });
+
+groupTable.belongsToMany(userTable, { through: usergroupTable, foreignKey: 'groupId' });
+userTable.belongsToMany(groupTable, { through: usergroupTable, foreignKey: 'userId' });
 
 
 
@@ -33,14 +51,10 @@ app.use(cors({
 
 app.use("/user",User)
 app.use("/messages",messages)
+app.use("/group",group)
 
-app.use((req,res)=>{
-  console.log("urll",req.url)
-  console.log("originalurll",req.originalUrl)
-  
-  res.sendFile(path.join(__dirname,`public/${req.url}`));
 
-})
+
 
 
 

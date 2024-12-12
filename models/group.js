@@ -2,16 +2,15 @@ const Sequelize=require("sequelize");
 
 const sequelize=require("../util/database");
 
-const Expense=sequelize.define("message",{
+const Expense=sequelize.define("group",{
     id:{
         type: Sequelize.INTEGER,
         autoIncrement:true,
         allowNull:false,
         primaryKey:true
     },
-    userName:Sequelize.STRING,
-    message: Sequelize.STRING,
-  
+    groupName:Sequelize.STRING,
+    inviteLink:Sequelize.STRING,
   
 });
 
