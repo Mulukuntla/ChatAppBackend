@@ -21,7 +21,6 @@ async function sendMessage(event){
     console.log(updatedMessage)
     console.log(user.name)
     updatedsendMessage(user.name,updatedMessage)
-    updateSendMessageLink()
     document.getElementById("message").value=""
     
    
