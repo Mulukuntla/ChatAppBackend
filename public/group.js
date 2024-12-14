@@ -16,7 +16,7 @@ async function sendMessage(event){
         name:user.name,
         message:message,
     }
-    const response=await axios.post(`http://localhost:4000/messages/sendMessage/${groupId}`,obj,{headers :{"Authorization" :token}}) 
+    const response=await axios.post(`http://51.20.172.55:4000/messages/sendMessage/${groupId}`,obj,{headers :{"Authorization" :token}}) 
     const updatedMessage=response.data.message.message
     console.log(updatedMessage)
     console.log(user.name)
@@ -41,7 +41,7 @@ function updatedsendMessage(name,message){
     const a = document.getElementById("chats");
    
 
-    if (message.includes("http://localhost:4000/group/allgroups/invite")) {
+    if (message.includes("http://51.20.172.55:4000/group/allgroups/invite")) {
         // Generate message with a clickable link
         numbers=numbers+1
         b = `<div class="message">${name}:<a href="#" id="${numbers}a">${message}</a></div>`;
@@ -64,7 +64,7 @@ document.addEventListener('DOMContentLoaded',async function () {
     //setInterval(allMessages,1000)
     localStorage.removeItem('groupId');
     const token=localStorage.getItem("token")
-    const response=await axios.get(`http://localhost:4000/group/allgroups`,{headers :{"Authorization" :token}}) 
+    const response=await axios.get(`http://51.20.172.55:4000/group/allgroups`,{headers :{"Authorization" :token}}) 
     console.log(response)
     const element=response.data.groups
     groups(element)
@@ -78,7 +78,7 @@ async function initial(){
         name:user.name,
         message:"is joined"
     }
-    const ress=await axios.post("http://localhost:4000/messages/sendMessage",obj,{headers :{"Authorization" :token}}) 
+    const ress=await axios.post("http://51.20.172.55:4000/messages/sendMessage",obj,{headers :{"Authorization" :token}}) 
     console.log(ress)
     updatedsendMessage(user.name,ress.data.message)
 
@@ -94,7 +94,7 @@ async function groupAdded(event){
             group:groupName
         }
         const token=localStorage.getItem("token")
-        const ress=await axios.post("http://localhost:4000/group/addgroup",obj,{headers :{"Authorization" :token}}) 
+        const ress=await axios.post("http://51.20.172.55:4000/group/addgroup",obj,{headers :{"Authorization" :token}}) 
         console.log(ress)
         const groups=document.getElementById("groups")
         const groupItem = document.createElement("li");
@@ -146,7 +146,7 @@ async function getChat(groupId,inviteLink){
     
     console.log(search)
     const token=localStorage.getItem("token")
-    const response=await axios.get(`http://localhost:4000/messages/allMessages/${groupId}`,{headers :{"Authorization" :token}}) 
+    const response=await axios.get(`http://51.20.172.55:4000/messages/allMessages/${groupId}`,{headers :{"Authorization" :token}}) 
     if(response.data.userAdmin==true){
         const searchInput=`<input type="text" id="addMembersToTheGroup"></input>addMembersToTheGroup`
         search.innerHTML=searchInput
@@ -182,7 +182,7 @@ async function getChat(groupId,inviteLink){
     localStorage.setItem("inviteLink",inviteLink)
     const groupInvite=document.getElementById("group-invite")
     const b=`
-        <p>Invite Link: <a href="http://localhost:4000/group/allgroups/invite/${inviteLink}" >http://localhost:4000/group/allgroups/invite/${inviteLink}</a></p>
+        <p>Invite Link: <a href="http://51.20.172.55:4000/group/allgroups/invite/${inviteLink}" >http://51.20.172.55:4000/group/allgroups/invite/${inviteLink}</a></p>
     `
     groupInvite.innerHTML=b
     
@@ -216,14 +216,14 @@ async function allMessages(){
     try{ 
         const group=localStorage.getItem("group")
         const token=localStorage.getItem("token")
-        const response=await axios.get(`http://localhost:4000/group/allgroups`,{headers :{"Authorization" :token}}) 
+        const response=await axios.get(`http://51.20.172.55:4000/group/allgroups`,{headers :{"Authorization" :token}}) 
         console.log(response)
         const element=response.data.groups
         groups(element)
     
         const groupId=localStorage.getItem("groupId")
         
-        const responsee=await axios.get(`http://localhost:4000/messages/allMessages/${groupId}`,{headers :{"Authorization" :token}}) 
+        const responsee=await axios.get(`http://51.20.172.55:4000/messages/allMessages/${groupId}`,{headers :{"Authorization" :token}}) 
         const a=document.getElementById("chats")
         a.innerHTML=""
         responsee.data.allMessages.forEach(element => {
@@ -268,7 +268,7 @@ async function members(){
     console.log("Hi")
     const groupId=localStorage.getItem("groupId")
     const token=localStorage.getItem("token")
-    const response=await axios.get(`http://localhost:4000/members/allmembers/${groupId}`,{headers :{"Authorization" :token}}) 
+    const response=await axios.get(`http://51.20.172.55:4000/members/allmembers/${groupId}`,{headers :{"Authorization" :token}}) 
     const a=document.getElementById("chats")
     a.innerHTML=""
     console.log(response.data)
@@ -359,7 +359,7 @@ async function updateAdminMember(userName,phoneNumber,userId,groupId){
     }
     console.log(groupId)
     const token=localStorage.getItem("token")
-    const response=await axios.post(`http://localhost:4000/members/addAdmin`,obj,{headers :{"Authorization" :token}}) 
+    const response=await axios.post(`http://51.20.172.55:4000/members/addAdmin`,obj,{headers :{"Authorization" :token}}) 
     console.log(response)
     console.log(response.data.message)
     if(response.data.message=="this user is an admin now"){
@@ -376,7 +376,7 @@ async function removeAsAdmin(userName,phoneNumber,userId,groupId){
         groupId:groupId,
     }
     const token=localStorage.getItem("token")
-    const response=await axios.post(`http://localhost:4000/members/removeAsAdmin`,obj,{headers :{"Authorization" :token}}) 
+    const response=await axios.post(`http://51.20.172.55:4000/members/removeAsAdmin`,obj,{headers :{"Authorization" :token}}) 
     console.log(response)
     if(response.data.message=="not an admin now"){
         console.log("Hi")
@@ -400,7 +400,7 @@ function inputt(){
         
         console.log(groupId)
         const token=localStorage.getItem("token")
-        const response=await axios.post(`http://localhost:4000/members/searchMembersToGroup`,obj,{headers :{"Authorization" :token}}) 
+        const response=await axios.post(`http://51.20.172.55:4000/members/searchMembersToGroup`,obj,{headers :{"Authorization" :token}}) 
         console.log(response)
         response.data.users.forEach(element => {
             showUsersToAdd(element.userName,element.phoneNumber,element.id,groupId)
@@ -448,7 +448,7 @@ async function addToGroup(userName,phoneNumber,userId,groupId){
             groupId:groupId
         }
         console.log("Hi")
-        const response=await axios.post(`http://localhost:4000/members/addMembersToGroup`,obj,{headers :{"Authorization" :token}}) 
+        const response=await axios.post(`http://51.20.172.55:4000/members/addMembersToGroup`,obj,{headers :{"Authorization" :token}}) 
        
        
        
@@ -489,7 +489,7 @@ async function removeUserFromGroup(userName,phoneNumber,userId,groupId){
             groupId:groupId
         }
         console.log("Hi")
-        const response=await axios.post(`http://localhost:4000/members/removeMembersToGroup`,obj,{headers :{"Authorization" :token}}) 
+        const response=await axios.post(`http://51.20.172.55:4000/members/removeMembersToGroup`,obj,{headers :{"Authorization" :token}}) 
         console.log(response)
         if(response.data.message=="not a member"){
             members()
