@@ -2,7 +2,7 @@ const Sequelize=require("sequelize");
 
 const sequelize=require("../util/database");
 
-const Expense=sequelize.define("usergroup",{
+const Expense=sequelize.define("adminGroup",{
   id:{
     type: Sequelize.INTEGER,
     autoIncrement:true,

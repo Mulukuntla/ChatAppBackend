@@ -1,6 +1,7 @@
 const user= require("../models/User")
 const group= require("../models/group")
 const usergroup= require("../models/usergroup")
+const admingroup= require("../models/admin")
 const crypto = require("crypto");
 const addGroup= async (req,res,next) =>{
     
@@ -9,9 +10,11 @@ const addGroup= async (req,res,next) =>{
         const inviteCode = crypto.randomBytes(8).toString("hex");
         const addgroup=await group.create({groupName:groupName,inviteLink:inviteCode})
         const a=await group.findOne({where:{groupName:groupName}})
+        const users=await user.findOne({where:{id:req.user.id}})
         console.log(a.id)
-
-        const b=await usergroup.create({userId:req.user.id,groupId:a.id})
+        const b=await usergroup.create({userName:users.userName,phoneNumber:users.phoneNumber,userId:req.user.id,groupId:a.id})
+        const c=await admingroup.create({userName:users.userName,phoneNumber:users.phoneNumber,userId:req.user.id,groupId:a.id})
+       
         res.status(201).json({groupId:a.id,groupName:groupName,inviteLink:inviteCode})
     }
     catch(err){

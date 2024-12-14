@@ -1,4 +1,5 @@
 const message= require("../models/messages")
+const admin= require("../models/admin")
 const sendMessage= async (req,res,next) =>{
     console.log("Hii")
     try{
@@ -21,9 +22,17 @@ const sendMessage= async (req,res,next) =>{
     console.log("Hii")
     try{
       console.log(req.params.groupId)
+      const userAdmin=await admin.findAll({where:{userId:req.user.id,groupId:req.params.groupId}})
       const allMessages=await message.findAll({where:{groupId:req.params.groupId}})
       console.log(allMessages)
-      res.status(200).json({allMessages:allMessages})
+      if(userAdmin.length>0){
+        res.status(200).json({allMessages:allMessages,userAdmin:true})
+
+      }
+      else{
+        res.status(200).json({allMessages:allMessages,userAdmin:false})
+
+      }
     }
     catch(err){
       console.log(err)

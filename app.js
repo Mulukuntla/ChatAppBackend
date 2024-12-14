@@ -9,10 +9,13 @@ const User = require('./routes/User')
 const messages = require('./routes/messages')
 const group= require('./routes/group')
 
+const members= require('./routes/members')
+
 const userTable=require("./models/User")
 const messagesTable=require("./models/messages")
 const groupTable=require("./models/group")
 const usergroupTable=require("./models/usergroup")
+const adminTable=require("./models/admin")
 
 var cors=require("cors")
 const app = express();
@@ -36,8 +39,18 @@ groupTable.belongsToMany(userTable, { through: "usergroup"});
 usergroupTable.belongsTo(userTable, { foreignKey: 'userId' });
 usergroupTable.belongsTo(groupTable, { foreignKey: 'groupId' });
 
-groupTable.belongsToMany(userTable, { through: usergroupTable, foreignKey: 'groupId' });
 userTable.belongsToMany(groupTable, { through: usergroupTable, foreignKey: 'userId' });
+groupTable.belongsToMany(userTable, { through: usergroupTable, foreignKey: 'groupId' });
+
+userTable.belongsToMany(groupTable, { through: "adminGroup" });
+groupTable.belongsToMany(userTable, { through: "adminGroup"});
+
+adminTable.belongsTo(userTable, { foreignKey: 'userId' });
+adminTable.belongsTo(groupTable, { foreignKey: 'groupId' });
+
+userTable.belongsToMany(groupTable, { through: adminTable, foreignKey: 'userId' });
+groupTable.belongsToMany(userTable, { through: adminTable, foreignKey: 'groupId' });
+
 
 
 
@@ -52,6 +65,8 @@ app.use(cors({
 app.use("/user",User)
 app.use("/messages",messages)
 app.use("/group",group)
+app.use("/members",members)
+
 
 
 
