@@ -61,12 +61,13 @@ function updatedsendMessage(name,message){
 }
 document.addEventListener('DOMContentLoaded',async function () {
     //setInterval(allMessages,1000)
-    localStorage.removeItem('groupId');
-    const token=localStorage.getItem("token")
-    const response=await axios.get(`http://51.20.172.55:4000/group/allgroups`,{headers :{"Authorization" :token}}) 
-    console.log(response)
-    const element=response.data.groups
-    groups(element)
+    
+    updateGroups()
+    setInterval(()=>{
+        seeChat()
+
+    },8000)
+    
     
 })
 
@@ -497,6 +498,14 @@ async function removeUserFromGroup(userName,phoneNumber,userId,groupId){
         
         console.log("Hi")
     
+
+}
+async function updateGroups(){
+    const token=localStorage.getItem("token")
+    const response=await axios.get(`http://51.20.172.55:4000/group/allgroups`,{headers :{"Authorization" :token}}) 
+    console.log(response)
+    const element=response.data.groups
+    groups(element)
 
 }
 
