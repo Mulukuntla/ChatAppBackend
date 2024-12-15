@@ -1,6 +1,7 @@
 const path = require('path');
 const express = require('express');
 const bodyParser = require('body-parser');
+const Http = require('http');
 const dotenv = require('dotenv');
 dotenv.config();
 
@@ -16,12 +17,36 @@ const messagesTable=require("./models/messages")
 const groupTable=require("./models/group")
 const usergroupTable=require("./models/usergroup")
 const adminTable=require("./models/admin")
-
-var cors=require("cors")
 const app = express();
 
+var cors=require("cors")
+const { Server } = require("socket.io");
+
+const server = Http.createServer(app);
+
+// Initialize Socket.IO
+const io = new Server(server, {
+  cors: {
+    origin: "*", // Replace "*" with your frontend URL for better security
+  },
+});
+io.on("connection", (socket) => {
+  console.log("Socket connected:", socket.id);
+  socket.on("sendMessage",(message)=>{
+    io.emit("receiveMessage",message)
+    console.log("message",message)
+  })
+
+})
 
 
+
+
+
+app.use(cors({
+  origin: "*",
+  credentials: true,
+}));
 
 //app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -54,10 +79,6 @@ groupTable.belongsToMany(userTable, { through: adminTable, foreignKey: 'groupId'
 
 
 
-app.use(cors({
-    origin:"*",
-    credentials:true,
-}));
 
 
 
@@ -79,12 +100,18 @@ app.use("/members",members)
 
 
 
+
+
+
+
+
+
 sequelize
 .sync()
 .then(result =>{
   console.log(result)
   const PORT = process.env.PORT || 4000; 
-  app.listen(PORT, () => {
+  server.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
 })
