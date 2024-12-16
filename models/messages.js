@@ -11,6 +11,7 @@ const Expense=sequelize.define("message",{
     },
     userName:Sequelize.STRING,
     message: Sequelize.STRING,
+    fileUrl:Sequelize.STRING,
   
   
 });

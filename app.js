@@ -32,8 +32,8 @@ const io = new Server(server, {
 });
 io.on("connection", (socket) => {
   console.log("Socket connected:", socket.id);
-  socket.on("sendMessage",(message)=>{
-    io.emit("receiveMessage",message)
+  socket.on("sendMessage",(message,fileUrl)=>{
+    io.emit("receiveMessage",message,fileUrl)
     console.log("message",message)
   })
 
