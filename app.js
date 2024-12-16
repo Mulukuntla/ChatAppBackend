@@ -17,7 +17,15 @@ const messagesTable=require("./models/messages")
 const groupTable=require("./models/group")
 const usergroupTable=require("./models/usergroup")
 const adminTable=require("./models/admin")
+const archievedChatTable=require("./models/archievedChat")
 const app = express();
+const cron = require("node-cron");
+const archieveMessages = require("./cron/cron");
+
+
+
+
+
 
 var cors=require("cors")
 const { Server } = require("socket.io");
@@ -77,7 +85,11 @@ userTable.belongsToMany(groupTable, { through: adminTable, foreignKey: 'userId' 
 groupTable.belongsToMany(userTable, { through: adminTable, foreignKey: 'groupId' });
 
 
+userTable.hasMany(archievedChatTable); // User has many Posts
+archievedChatTable.belongsTo(userTable); 
 
+groupTable.hasMany(archievedChatTable); // User has many Posts
+archievedChatTable.belongsTo(groupTable); 
 
 
 
@@ -87,6 +99,12 @@ app.use("/user",User)
 app.use("/messages",messages)
 app.use("/group",group)
 app.use("/members",members)
+cron.schedule("*/5 * * * *", async () => {
+  console.log("Starting cron job to archive old messages...");
+ await archieveMessages.archieveMessages();}, {
+  scheduled: true,
+  
+});
 
 
 
