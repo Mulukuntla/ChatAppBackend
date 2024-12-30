@@ -12,7 +12,7 @@ async function sendMessage(event){
         name:user.name,
         message:message,
     }
-    const response=await axios.post(`http://localhost:4000/messages/sendMessage/${groupId}`,obj,{headers :{"Authorization" :token}}) 
+    const response=await axios.post(`http://51.20.172.55:4008/messages/sendMessage/${groupId}`,obj,{headers :{"Authorization" :token}}) 
     const updatedMessage=response.data.message.message
     console.log(updatedMessage)
     console.log(user.name)
@@ -51,7 +51,7 @@ document.addEventListener('DOMContentLoaded',function () {
         try{
            // const group=localStorage.getItem("group")
             const token=localStorage.getItem("token")
-            const response=await axios.get(`http://localhost:4000/group/allgroups`,{headers :{"Authorization" :token}}) 
+            const response=await axios.get(`http://51.20.172.55:4008/group/allgroups`,{headers :{"Authorization" :token}}) 
             console.log(response)
             response.data.groups.forEach(element => {
                 
@@ -60,7 +60,7 @@ document.addEventListener('DOMContentLoaded',function () {
             });
             const groupId=localStorage.getItem("groupId")
             
-            const responsee=await axios.get(`http://localhost:4000/messages/allMessages/${groupId}`,{headers :{"Authorization" :token}}) 
+            const responsee=await axios.get(`http://51.20.172.55:4008/messages/allMessages/${groupId}`,{headers :{"Authorization" :token}}) 
             const a=document.getElementById("chats")
             a.innerHTML=""
             responsee.data.allMessages.forEach(element => {
@@ -83,7 +83,7 @@ async function initial(){
         name:user.name,
         message:"is joined"
     }
-    const ress=await axios.post("http://localhost:4000/messages/sendMessage",obj,{headers :{"Authorization" :token}}) 
+    const ress=await axios.post("http://51.20.172.55:4008/messages/sendMessage",obj,{headers :{"Authorization" :token}}) 
     console.log(ress)
     updatedsendMessage(user.name,ress.data.message)
 }
@@ -109,7 +109,7 @@ async function groupAdded(event){
             group:groupName
         }
         const token=localStorage.getItem("token")
-        const ress=await axios.post("http://localhost:4000/group/addgroup",obj,{headers :{"Authorization" :token}}) 
+        const ress=await axios.post("http://51.20.172.55:4008/group/addgroup",obj,{headers :{"Authorization" :token}}) 
         
         const groups=document.getElementById("groups")
         const addGroup=`
@@ -147,7 +147,7 @@ function groups(element){
 
 async function getChat(groupId,groupName){
     const token=localStorage.getItem("token")
-    const response=await axios.get(`http://localhost:4000/messages/allMessages/${groupId}`,{headers :{"Authorization" :token}}) 
+    const response=await axios.get(`http://51.20.172.55:4008/messages/allMessages/${groupId}`,{headers :{"Authorization" :token}}) 
     const a=document.getElementById("chats")
     a.innerHTML=""
     if(response.data.allMessages.length ===0){

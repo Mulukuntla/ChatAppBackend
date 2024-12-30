@@ -13,7 +13,7 @@ async function signup(event){
         password:password
         }
         console.log(obj)
-        const response=await axios.post("http://localhost:4000/user/signup",obj)
+        const response=await axios.post("http://51.20.172.55:4008/user/signup",obj)
         alert("Successfully signed up")
     }
    catch(err){
