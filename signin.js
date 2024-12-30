@@ -9,7 +9,7 @@ async function signin(event){
         password:password
         }
         console.log(obj)
-        const response=await axios.post("http://localhost:4000/user/signin",obj)
+        const response=await axios.post("http://51.20.172.55:4008/user/signin",obj)
         localStorage.setItem("token",response.data.token)
         console.log(response)
         window.location.href = "./group.html";
